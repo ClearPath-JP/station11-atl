@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Station 11 — Caribbean-Asian Fusion | Midtown Atlanta",
+  title: "Station 11 — Cafe & Restaurant | Midtown Atlanta",
   description:
-    "Where East meets West Indies. Caribbean-Asian fusion restaurant and cafe in a historic 1907 firehouse. Midtown Atlanta.",
+    "Caribbean-Asian cafe in a 1907 firehouse. Breakfast, brunch, lunch & coffee. Midtown Atlanta. Reserve on Resy.",
   openGraph: {
     title: "Station 11 — Where East Meets West Indies",
     description:
