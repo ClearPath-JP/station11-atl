@@ -15,7 +15,8 @@ body {
 }
 
 ::selection {
-  background: rgba(204, 0, 0, 0.3);
+  background: rgba(204, 0, 0, 0.35);
+  color: #F5F0EB;
 }
 
 .font-display {
@@ -24,4 +25,16 @@ body {
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* Dotted divider — Amrit Palace style */
+.dotted-divider {
+  border: none;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+}
+
+/* Smooth line separator */
+.line-fade {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
 }
