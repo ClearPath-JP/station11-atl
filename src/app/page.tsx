@@ -326,7 +326,7 @@ export default function Page() {
                     <div className="flex items-baseline gap-3">
                       <h3 className="text-[clamp(15px,1.2vw,18px)] font-medium" style={{ color: c.cream }}>
                         {item.name}
-                        {"featured" in item && item.featured && <span className="ml-2 text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 rounded-full" style={{ background: `${c.gold}20`, color: c.gold }}>Popular</span>}
+                        {(item as { featured?: boolean }).featured && <span className="ml-2 text-[10px] tracking-[0.15em] uppercase px-2 py-0.5 rounded-full" style={{ background: `${c.gold}20`, color: c.gold }}>Popular</span>}
                       </h3>
                       <div className="flex-1 border-b border-dotted hidden sm:block" style={{ borderColor: c.border }} />
                       <span className="text-[clamp(14px,1.1vw,17px)] font-light tabular-nums hidden sm:block" style={{ color: c.muted }}>${item.price}</span>
