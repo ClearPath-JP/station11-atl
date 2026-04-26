@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 html {
   scroll-behavior: smooth;
@@ -10,31 +10,28 @@ body {
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #111110;
-  color: #F5F0EB;
+  background: #0E0D0B;
+  color: #F0EBE3;
 }
 
 ::selection {
-  background: rgba(204, 0, 0, 0.35);
-  color: #F5F0EB;
+  background: rgba(196, 158, 100, 0.3);
+  color: #F0EBE3;
 }
 
 .font-display {
-  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Dotted divider — Amrit Palace style */
-.dotted-divider {
-  border: none;
-  border-top: 1px dashed rgba(255,255,255,0.08);
-}
-
-/* Smooth line separator */
 .line-fade {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(196,158,100,0.15), transparent);
 }
