@@ -9,14 +9,15 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-/* ─── Theme ───────────────────────────────────────────────────── */
+/* ─── Theme — matched to actual S11 brand + interior tones ───── */
 const c = {
-  red: "#CC0000",
+  red: "#C41E1E",        /* slightly warmer than pure #CC0000, matches their IG promo red */
   cream: "#F5F0EB",
-  dark: "#0F0F0F",
-  surface: "#161616",
-  muted: "#7A7570",
-  text: "#C8C3BE",
+  dark: "#111110",        /* warm black, not blue-black */
+  surface: "#1A1917",     /* warm surface, hint of brown */
+  muted: "#8A8279",       /* warm gray matching marble + wood tones */
+  text: "#CCC5BB",        /* warm cream text */
+  warmAccent: "#C8A97E",  /* tan/sand from their chairs */
 };
 
 /* ─── Menu Data ──────────────────────────────────────────────── */
@@ -298,6 +299,22 @@ export default function Station11Page() {
               {["Caribbean-Asian Fusion", "Historic 1907 Firehouse", "Resy Top 25", "5.0 Stars", "Private Events", "Speakeasy Coming Soon"].map((t) => (
                 <span key={t} className="px-4 py-2 text-[11px] font-medium tracking-[0.08em] uppercase rounded-full border border-white/[0.08]" style={{ color: c.muted }}>{t}</span>
               ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Featured Dish Photo ────────────────────────── */}
+      <section className="px-6 sm:px-10" style={{ paddingTop: "clamp(40px, 6vw, 80px)", paddingBottom: "clamp(40px, 6vw, 80px)" }}>
+        <div className="max-w-[900px] mx-auto">
+          <Reveal>
+            <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden">
+              <img src="/images/jerk-chicken.jpg" alt="Jerk chicken with rice and peas, plantain, and cabbage — Station 11 signature" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5">
+                <p className="text-[clamp(18px,2.5vw,28px)] font-display tracking-[0.03em] text-white">JERK CHICKEN</p>
+                <p className="text-[13px] text-white/60 mt-1">Rice &amp; peas, cabbage, plantain — a signature</p>
+              </div>
             </div>
           </Reveal>
         </div>
