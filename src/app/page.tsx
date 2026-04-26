@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 
-/* ─── Palette — warm cafe, Dishoom-inspired ──────────────────── */
+/* ─── Palette — warm cafe, layered shades ────────────────────── */
 const c = {
   bg: "#F0ECE0",
+  bgWarm: "#EBE5D5",      /* slightly deeper cream */
+  bgDeep: "#E4DDCC",      /* warmer still */
   text: "#2C2A25",
   textMuted: "#6B6560",
   accent: "#9B2C2C",
@@ -69,6 +71,77 @@ function R({ children, className = "", delay = 0 }: { children: React.ReactNode;
 
 function CardAnim({ children, className = "", delay = 0, style }: { children: React.ReactNode; className?: string; delay?: number; style?: React.CSSProperties }) {
   return <motion.div initial={{ opacity: 0, y: 36, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }} className={className} style={style}>{children}</motion.div>;
+}
+
+/* Animated line that draws itself on scroll */
+function AnimLine({ width = "40%", color = c.border, className = "" }: { width?: string; color?: string; className?: string }) {
+  return (
+    <div className={`mx-auto overflow-hidden ${className}`} style={{ maxWidth: width }}>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: "-20px" }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="h-[1px] origin-left"
+        style={{ background: color }}
+      />
+    </div>
+  );
+}
+
+/* Word-by-word reveal for key headlines */
+function WordPop({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
+  return (
+    <span className={`inline-flex flex-wrap ${className}`}>
+      {text.split(" ").map((word, i) => (
+        <motion.span
+          key={`${word}-${i}`}
+          initial={{ opacity: 0, y: 14, filter: "blur(4px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-30px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: delay + i * 0.08 }}
+          className="mr-[0.28em] inline-block"
+        >{word}</motion.span>
+      ))}
+    </span>
+  );
+}
+
+/* Animated counter for stats */
+function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = useState(0);
+  const { scrollYProgress: inView } = useScroll({ target: ref, offset: ["start end", "end center"] });
+  useEffect(() => {
+    return inView.on("change", (v) => {
+      if (v > 0.3) setDisplay(value);
+    });
+  }, [inView, value]);
+  return (
+    <motion.span ref={ref} className="tabular-nums" animate={{ opacity: display > 0 ? 1 : 0.3 }} transition={{ duration: 0.5 }}>
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={display > 0 ? { opacity: 1 } : {}}
+      >{display > 0 ? value : 0}{suffix}</motion.span>
+    </motion.span>
+  );
+}
+
+/* Decorative dot pattern for warmth */
+function WarmDots({ className = "" }: { className?: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.5 }}
+      className={`pointer-events-none ${className}`}
+      style={{
+        backgroundImage: `radial-gradient(${c.border} 1px, transparent 1px)`,
+        backgroundSize: "24px 24px",
+      }}
+    />
+  );
 }
 
 function Burger({ open }: { open: boolean }) {
@@ -175,15 +248,19 @@ export default function Page() {
       </div>
 
       {/* ── Story ───────────────────────────────────────── */}
-      <section id="story" className="px-6 sm:px-10" style={{ paddingTop: "clamp(80px,12vw,160px)", paddingBottom: "clamp(60px,8vw,120px)" }}>
-        <div className="max-w-[700px] mx-auto text-center">
-          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-8" style={{ color: c.accent }}>Our Story</p></R>
-          <R delay={0.1}>
-            <h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.25] mb-8" style={{ color: c.text }}>
-              Where wok meets grill, and jerk traditions meet Asian precision.
-            </h2>
-          </R>
-          <R delay={0.2}>
+      <section id="story" className="relative px-6 sm:px-10" style={{ paddingTop: "clamp(100px,14vw,200px)", paddingBottom: "clamp(60px,8vw,120px)" }}>
+        <WarmDots className="absolute top-24 left-0 w-20 h-48 opacity-25 hidden lg:block" />
+        <WarmDots className="absolute bottom-12 right-0 w-20 h-48 opacity-25 hidden lg:block" />
+        <div className="max-w-[700px] mx-auto text-center relative">
+          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-4" style={{ color: c.accent }}>Our Story</p></R>
+          <AnimLine width="60px" color={c.accent} className="mb-10" />
+          <h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.25] mb-8" style={{ color: c.text }}>
+            <WordPop text="Where wok meets grill," delay={0} />
+            <br />
+            <WordPop text="and jerk traditions" delay={0.3} />
+            {" "}<span style={{ color: c.accent }}><WordPop text="meet Asian precision." delay={0.5} /></span>
+          </h2>
+          <R delay={0.6}>
             <p className="text-[clamp(15px,1.2vw,17px)] leading-[1.85]" style={{ color: c.textMuted }}>
               Dumplings filled with braised oxtail. Rice kissed with coconut.
               Every dish is both familiar and surprising — a celebration of
@@ -191,6 +268,7 @@ export default function Page() {
               Station 11, and all are welcome.
             </p>
           </R>
+          <AnimLine width="30%" className="mt-12" />
         </div>
       </section>
 
@@ -238,8 +316,9 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Feature Cards — on darker surface ────────────── */}
-      <section style={{ background: c.surface, paddingTop: "clamp(60px,8vw,100px)", paddingBottom: "clamp(60px,8vw,100px)" }}>
+      {/* ── Feature Cards — on warmer shade ─────────────── */}
+      <section className="relative" style={{ background: c.bgWarm, paddingTop: "clamp(60px,8vw,100px)", paddingBottom: "clamp(60px,8vw,100px)" }}>
+        <AnimLine width="50%" className="absolute top-0 left-1/2 -translate-x-1/2" />
         <div className="max-w-[1100px] mx-auto px-6 sm:px-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Coffee", title: "Gilly Brew Bar", desc: "Single-origin from Stone Mountain. Espresso, lattes, chai, matcha — pulled fresh, all day long." },
@@ -255,24 +334,30 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ── Quote — Dishoom style centered ────────────────── */}
-      <section className="px-6 sm:px-10" style={{ paddingTop: "clamp(60px,8vw,120px)", paddingBottom: "clamp(60px,8vw,120px)" }}>
-        <div className="max-w-[650px] mx-auto text-center">
+      {/* ── Quote ────────────────────────────────────────── */}
+      <section className="relative px-6 sm:px-10" style={{ paddingTop: "clamp(70px,10vw,140px)", paddingBottom: "clamp(70px,10vw,140px)", background: c.bgDeep }}>
+        <WarmDots className="absolute top-0 right-8 w-16 h-32 opacity-20 hidden lg:block" />
+        <div className="max-w-[650px] mx-auto text-center relative">
+          <AnimLine width="40px" color={c.accent} className="mb-10" />
           <R>
-            <div className="w-12 h-[1px] mx-auto mb-8" style={{ background: c.accent }} />
-            <p className="font-serif italic text-[clamp(20px,2.8vw,34px)] leading-[1.4] mb-6" style={{ color: c.text }}>
-              &ldquo;Come for a coffee date and stay for a meal within its historic space.&rdquo;
+            <p className="font-serif italic text-[clamp(22px,3vw,38px)] leading-[1.35] mb-8" style={{ color: c.text }}>
+              <WordPop text="&ldquo;Come for a coffee date and stay for a meal within its historic space.&rdquo;" delay={0} />
             </p>
-            <p className="text-[12px] tracking-[0.2em] uppercase" style={{ color: c.accent }}>Resy &middot; Top 25 Atlanta &middot; 5.0 Stars</p>
           </R>
+          <R delay={0.4}>
+            <p className="text-[12px] tracking-[0.2em] uppercase font-medium" style={{ color: c.accent }}>Resy &middot; Top 25 Atlanta &middot; 5.0 Stars</p>
+          </R>
+          <AnimLine width="40px" color={c.accent} className="mt-10" />
         </div>
       </section>
 
       {/* ── Menu ─────────────────────────────────────────── */}
-      <section id="menu" style={{ background: c.surface, paddingTop: "clamp(80px,10vw,160px)", paddingBottom: "clamp(80px,10vw,160px)" }}>
+      <section id="menu" className="relative" style={{ background: c.bgWarm, paddingTop: "clamp(80px,10vw,160px)", paddingBottom: "clamp(80px,10vw,160px)" }}>
+        <AnimLine width="50%" className="absolute top-0 left-1/2 -translate-x-1/2" />
         <div className="max-w-[800px] mx-auto px-6 sm:px-10">
-          <R><p className="text-[11px] tracking-[0.35em] uppercase text-center mb-6" style={{ color: c.accent }}>Menu</p></R>
-          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] text-center mb-4">Every dish tells a story.</h2></R>
+          <R><p className="text-[11px] tracking-[0.35em] uppercase text-center mb-4" style={{ color: c.accent }}>Menu</p></R>
+          <AnimLine width="40px" color={c.accent} className="mb-8" />
+          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] text-center mb-4"><WordPop text="Every dish tells a story." delay={0} /></h2></R>
           <R delay={0.15}><p className="text-center text-[clamp(14px,1vw,16px)] max-w-[440px] mx-auto mb-10" style={{ color: c.textMuted }}>Caribbean soul meets Asian fire — from oxtail benedicts at breakfast to wok-tossed lo mein at lunch.</p></R>
 
           <R delay={0.2}>
@@ -319,10 +404,12 @@ export default function Page() {
       </section>
 
       {/* ── Firehouse ────────────────────────────────────── */}
-      <section id="firehouse" className="px-6 sm:px-10" style={{ paddingTop: "clamp(80px,12vw,160px)", paddingBottom: "clamp(80px,12vw,160px)" }}>
+      <section id="firehouse" className="relative px-6 sm:px-10" style={{ paddingTop: "clamp(80px,12vw,160px)", paddingBottom: "clamp(80px,12vw,160px)" }}>
+        <WarmDots className="absolute top-20 left-4 w-16 h-40 opacity-20 hidden lg:block" />
         <div className="max-w-[700px] mx-auto text-center">
-          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-8" style={{ color: c.accent }}>The Firehouse</p></R>
-          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] mb-8">A century of history, a new chapter of flavor.</h2></R>
+          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-4" style={{ color: c.accent }}>The Firehouse</p></R>
+          <AnimLine width="60px" color={c.accent} className="mb-10" />
+          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] mb-8"><WordPop text="A century of history, a new chapter of flavor." delay={0} /></h2></R>
           <R delay={0.2}>
             <p className="text-[clamp(15px,1.2vw,17px)] leading-[1.85] mb-10" style={{ color: c.textMuted }}>
               Fire Station No. 11 has stood on North Avenue since 1907. Listed on the National Register of Historic Places, the 3,300-square-foot space still holds its original arched windows, rich millwork, and exposed brick. Bold murals cover the walls. Marble-top tables sit beside sage velvet banquettes. We kept every bone of this building and added the soul.
@@ -344,10 +431,12 @@ export default function Page() {
       </section>
 
       {/* ── Visit ────────────────────────────────────────── */}
-      <section id="visit" style={{ background: c.surface, paddingTop: "clamp(80px,10vw,160px)", paddingBottom: "clamp(80px,10vw,160px)" }}>
+      <section id="visit" className="relative" style={{ background: c.bgDeep, paddingTop: "clamp(80px,10vw,160px)", paddingBottom: "clamp(80px,10vw,160px)" }}>
+        <AnimLine width="50%" className="absolute top-0 left-1/2 -translate-x-1/2" />
         <div className="max-w-[900px] mx-auto px-6 sm:px-10 text-center">
-          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-6" style={{ color: c.accent }}>Visit Us</p></R>
-          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] mb-4">From the firehouse, with love.</h2></R>
+          <R><p className="text-[11px] tracking-[0.35em] uppercase mb-4" style={{ color: c.accent }}>Visit Us</p></R>
+          <AnimLine width="40px" color={c.accent} className="mb-8" />
+          <R delay={0.1}><h2 className="font-serif italic text-[clamp(28px,4vw,48px)] leading-[1.2] mb-4"><WordPop text="From the firehouse, with love." delay={0} /></h2></R>
           <R delay={0.15}><p className="text-[clamp(14px,1vw,16px)] max-w-[400px] mx-auto mb-12" style={{ color: c.textMuted }}>Walk-ins welcome. Reservations on Resy. Come hungry, leave full, tell a friend.</p></R>
 
           <R delay={0.2}>
