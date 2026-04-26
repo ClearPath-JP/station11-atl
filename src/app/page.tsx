@@ -331,7 +331,7 @@ export default function Page() {
                       <div className="flex-1 border-b border-dotted hidden sm:block" style={{ borderColor: c.border }} />
                       <span className="text-[clamp(14px,1.1vw,17px)] font-light tabular-nums hidden sm:block" style={{ color: c.muted }}>${item.price}</span>
                     </div>
-                    {item.desc && <p className="text-[clamp(12px,0.9vw,14px)] mt-1.5 leading-relaxed" style={{ color: c.muted }}>{item.desc}</p>}
+                    {"desc" in item && item.desc && <p className="text-[clamp(12px,0.9vw,14px)] mt-1.5 leading-relaxed" style={{ color: c.muted }}>{item.desc as string}</p>}
                   </div>
                   <span className="text-[15px] font-light tabular-nums sm:hidden" style={{ color: c.muted }}>${item.price}</span>
                 </div>
