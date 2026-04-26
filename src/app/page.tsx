@@ -115,10 +115,8 @@ export default function Page() {
       <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.3 }}
         className="fixed top-0 inset-x-0 z-50 backdrop-blur-lg border-b" style={{ background: "rgba(14,13,11,0.88)", borderColor: c.border }}>
         <div className="max-w-[1400px] mx-auto px-6 sm:px-10 h-16 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-3">
-            <span className="font-display text-[20px] tracking-[0.08em]" style={{ color: c.gold }}>STATION</span>
-            <span className="w-[3px] h-[3px] rounded-full" style={{ background: c.gold }} />
-            <span className="font-display text-[20px] tracking-[0.08em]" style={{ color: c.cream }}>ELEVEN</span>
+          <a href="#top" className="flex items-center">
+            <img src="/images/logo-white.jpg" alt="Station 11" className="h-8 object-contain invert brightness-200" />
           </a>
           <div className="hidden md:flex items-center gap-8 text-[13px]" style={{ color: c.muted }}>
             {NAV.map((l) => <a key={l.label} href={l.href} className="hover:text-[#F0EBE3] transition-colors duration-300">{l.label}</a>)}
@@ -144,41 +142,48 @@ export default function Page() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* ── Hero — full viewport, centered ──────────────── */}
+      {/* ── Hero — building photo background ─────────────── */}
       <section ref={heroRef} id="top" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
-        {/* Background: subtle warm radial */}
-        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 35%, rgba(196,158,100,0.06) 0%, transparent 60%)` }} />
-        <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${c.dark} 0%, transparent 30%, transparent 80%, ${c.dark} 100%)` }} />
+        {/* Building photo as background */}
+        <div className="absolute inset-0">
+          <img src="/images/exterior.jpg" alt="Station 11 historic firehouse" className="w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(14,13,11,0.85) 0%, rgba(14,13,11,0.6) 40%, rgba(14,13,11,0.75) 70%, rgba(14,13,11,0.95) 100%)" }} />
+        </div>
 
         <motion.div style={{ opacity: heroOp }} className="relative text-center px-6 max-w-[1000px]">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }}
-            className="text-[11px] sm:text-[12px] tracking-[0.4em] uppercase mb-10" style={{ color: c.muted }}>
+          {/* Actual logo */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mb-8">
+            <img src="/images/logo-white.jpg" alt="Station Eleven logo" className="h-16 sm:h-20 mx-auto object-contain invert brightness-200" />
+          </motion.div>
+
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}
+            className="text-[11px] sm:text-[12px] tracking-[0.4em] uppercase mb-8" style={{ color: "rgba(196,158,100,0.7)" }}>
             Midtown Atlanta &bull; Est. in a 1907 Firehouse
           </motion.p>
 
-          <motion.h1 className="font-serif italic text-[clamp(40px,8vw,90px)] leading-[1.05] tracking-[-0.02em] mb-6"
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}>
+          <motion.h1 className="font-serif italic text-[clamp(38px,7.5vw,88px)] leading-[1.08] tracking-[-0.02em] mb-6 text-white"
+            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}>
             Where East Meets
             <br />
             <span style={{ color: c.gold }}>West Indies</span>
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-[clamp(15px,1.4vw,19px)] font-light leading-[1.7] max-w-[520px] mx-auto" style={{ color: c.text }}>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-[clamp(15px,1.4vw,19px)] font-light leading-[1.7] max-w-[520px] mx-auto text-white/70">
             Caribbean-Asian fusion cuisine. Jerk traditions meet Asian
             precision in a historic firehouse where every dish tells
             two stories at once.
           </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.1 }}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
             <a href="https://resy.com/cities/atlanta-ga/venues/station-11" target="_blank" rel="noopener noreferrer"
-              className="px-8 py-4 sm:py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:brightness-110 min-h-[48px] inline-flex items-center"
+              className="px-8 py-4 sm:py-3.5 rounded-full text-[14px] font-medium transition-all duration-300 hover:brightness-110 hover:scale-105 min-h-[48px] inline-flex items-center"
               style={{ background: c.gold, color: c.dark }}>
               Reserve a Table
             </a>
-            <a href="#menu" className="px-8 py-4 sm:py-3.5 rounded-full text-[14px] font-medium border transition-all duration-300 hover:bg-white/5 min-h-[48px] inline-flex items-center"
-              style={{ borderColor: c.border, color: c.cream }}>
+            <a href="#menu" className="px-8 py-4 sm:py-3.5 rounded-full text-[14px] font-medium border border-white/20 text-white transition-all duration-300 hover:bg-white/10 min-h-[48px] inline-flex items-center">
               View Menu
             </a>
           </motion.div>
@@ -186,9 +191,24 @@ export default function Page() {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }} className="absolute bottom-10 left-1/2 -translate-x-1/2">
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[1px] h-10 bg-gradient-to-b from-[#C49E64]/40 to-transparent" />
+            className="w-[1px] h-10 bg-gradient-to-b from-[#C49E64]/50 to-transparent" />
         </motion.div>
       </section>
+
+      {/* ── Ticker / Marquee ────────────────────────────── */}
+      <div className="overflow-hidden py-4" style={{ background: c.gold }}>
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="flex whitespace-nowrap gap-8"
+        >
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={i} className="text-[13px] font-medium tracking-[0.15em] uppercase" style={{ color: c.dark }}>
+              Caribbean-Asian Fusion &bull; Brunch &bull; Lunch &bull; Coffee by Gilly Brew Bar &bull; Private Events &bull; Resy Top 25 &bull; Est. 1907 &bull;&nbsp;
+            </span>
+          ))}
+        </motion.div>
+      </div>
 
       {/* ── Story — full-width editorial ─────────────────── */}
       <section id="story" className="px-6 sm:px-10" style={{ paddingTop: "clamp(100px,14vw,200px)", paddingBottom: "clamp(60px,8vw,120px)" }}>
@@ -451,7 +471,7 @@ export default function Page() {
       <footer className="px-6 sm:px-10 py-14 border-t" style={{ borderColor: c.border }}>
         <div className="max-w-[1000px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <p className="font-display text-[28px] tracking-[0.06em]"><span style={{ color: c.gold }}>STATION</span> <span style={{ color: c.cream }}>11</span></p>
+            <img src="/images/logo-white.jpg" alt="Station Eleven" className="h-12 object-contain invert brightness-200 mb-2" />
             <p className="text-[13px] mt-2" style={{ color: c.muted }}>Caribbean-Asian Fusion &bull; Midtown Atlanta</p>
           </div>
           <div className="flex items-center gap-8 text-[13px] py-2" style={{ color: c.muted }}>
