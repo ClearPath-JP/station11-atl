@@ -107,26 +107,6 @@ function WordPop({ text, className = "", delay = 0 }: { text: string; className?
   );
 }
 
-/* Animated counter for stats */
-function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState(0);
-  const { scrollYProgress: inView } = useScroll({ target: ref, offset: ["start end", "end center"] });
-  useEffect(() => {
-    return inView.on("change", (v) => {
-      if (v > 0.3) setDisplay(value);
-    });
-  }, [inView, value]);
-  return (
-    <motion.span ref={ref} className="tabular-nums" animate={{ opacity: display > 0 ? 1 : 0.3 }} transition={{ duration: 0.5 }}>
-      <motion.span
-        initial={{ opacity: 0 }}
-        animate={display > 0 ? { opacity: 1 } : {}}
-      >{display > 0 ? value : 0}{suffix}</motion.span>
-    </motion.span>
-  );
-}
-
 /* Decorative dot pattern for warmth */
 function WarmDots({ className = "" }: { className?: string }) {
   return (
